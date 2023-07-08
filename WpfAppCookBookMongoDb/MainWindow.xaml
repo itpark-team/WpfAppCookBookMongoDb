@@ -5,21 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:WpfAppCookBookMongoDb.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="650" Width="800">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
     <Grid>
-        <ListBox x:Name="listBox" ItemsSource="{Binding FoodRecipes}"  Margin="0,0,485,130">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding Path=Name}"/>
-                        <TextBlock Text="{Binding Path=Rating}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
 
+        <StackPanel>
+            <ListBox ItemsSource="{Binding FoodRecipes}" SelectedItem="{Binding SelectedFoodRecipe}" Grid.Column="0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Path=Name}"/>
+                            <TextBlock Text="Рейтинг: " Margin="10,0,0,0"/>
+                            <TextBlock Text="{Binding Path=Rating}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBox Text="{Binding FoodRecipeForAdd.Name}" />
+            <Button Content="Add new" Command="{Binding AddNewRecipeCommand}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+            <TextBlock Text="{Binding Path=SelectedFoodRecipe.Name}"/>
+            <Image Source="{Binding Path=SelectedFoodRecipe.PicturePath}"/>
+          
+            <TextBlock>
+                Рейтинг: <TextBlock Text="{Binding Path=SelectedFoodRecipe.Rating}"/>
+            </TextBlock>
+            
+            <TextBlock Text="Ингредиенты: "/>
+            <ListBox ItemsSource="{Binding SelectedFoodRecipe.Ingredients}" Height="100">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=Amount}"/>
+                            <TextBlock Text="{Binding Path=Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            
+            
+            <Button Content="Delete current" Command="{Binding DeleteCurrentRecipeCommand}"/>
+
+        </StackPanel>
     </Grid>
 </Window>
